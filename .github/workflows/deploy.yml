@@ -1,0 +1,43 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/agent/**'
+      - 'supabase/**'
+  pull_request:
+    branches: [main]
+
+jobs:
+  deploy-agent:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Deploy to Render
+        run: |
+          echo "Render will auto-detect render.yaml from GitHub push"
+          echo "Configure Render webhook to trigger on push"
+        
+      - name: Verify Render deployment
+        if: vars.RENDER_SERVICE_NAME != ''
+        run: |
+          echo "Waiting for Render deployment..."
+          sleep 30
+          curl -f https://${{ vars.RENDER_SERVICE_NAME }}.onrender.com/health || exit 1
+
+  deploy-frontend:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.ORG_ID }}
+          vercel-project-id: ${{ secrets.PROJECT_ID }}
+          vercel-args: '--prod'
