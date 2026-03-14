@@ -1,0 +1,31 @@
+[project]
+name = "agentic-rag-agent"
+version = "0.1.0"
+description = "Agentic RAG Python Agent"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "langgraph>=0.2",
+    "langchain>=0.3",
+    "langchain-google-genai",
+    "openrouter",
+    "pypdf",
+    "pdfplumber",
+    "crawl4ai",
+    "tree-sitter",
+    "langchain-text-splitters",
+    "httpx",
+    "supabase",
+    "python-dotenv",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

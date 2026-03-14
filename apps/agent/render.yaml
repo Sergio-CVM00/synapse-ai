@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: agentic-rag-agent
+    runtime: docker
+    rootDir: apps/agent
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: MAX_RETRIEVAL_ITERATIONS
+        value: "2"
+      - key: EMBEDDING_BATCH_SIZE
+        value: "20"
+      - key: EMBEDDING_DIMENSIONS
+        value: "1536"
+      - key: PORT
+        value: "8000"

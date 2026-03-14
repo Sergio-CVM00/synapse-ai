@@ -1,0 +1,23 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "supabase": {
+      "type": "remote",
+      "url": "https://mcp.supabase.com/mcp",
+      "enabled": true
+    },
+    "render": {
+      "type": "remote",
+      "url": "https://render.com/docs/mcp-server",
+      "enabled": true,
+      "headers": {
+        "Authorization": "Bearer rnd_3WCnyPF3FDj1vM48MQ0YKQfE1yDP"
+      }
+    },
+    "vercel": {
+      "type": "remote",
+      "url": "https://vercel.com/api/mcp",
+      "enabled": true
+    }
+  }
+}
