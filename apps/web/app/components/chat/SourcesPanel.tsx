@@ -112,11 +112,11 @@ export function SourcesPanel({ chunks, isOpen, onToggle }: SourcesPanelProps) {
                       <p className="text-sm font-medium text-gray-900 truncate">
                         {getSourceName(chunk)}
                       </p>
-                      {chunk.metadata?.heading && (
+                      {chunk.metadata?.heading ? (
                         <p className="text-xs text-gray-500 truncate mt-0.5">
-                          {chunk.metadata.heading as string}
+                          {String(chunk.metadata.heading)}
                         </p>
-                      )}
+                      ) : null}
                     </div>
                     <svg 
                       className={`w-4 h-4 text-gray-400 flex-shrink-0 mt-1 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}

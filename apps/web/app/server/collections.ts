@@ -1,5 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
 import { createServerSupabaseClient } from '~/lib/supabase.server'
+import { z } from 'zod'
 
 export const getCollections = createServerFn({ method: 'GET' }).handler(async () => {
   const supabase = createServerSupabaseClient()
@@ -11,30 +12,38 @@ export const getCollections = createServerFn({ method: 'GET' }).handler(async ()
   return data
 })
 
-export const getCollection = createServerFn({ method: 'GET' })
-  .validator((id: string) => id)
+const GetCollectionData = z.string()
+
+export const getCollection = createServerFn({ method: 'POST' })
   .handler(async ({ data: id }) => {
+    const collectionId = GetCollectionData.parse(id)
     const supabase = createServerSupabaseClient()
     const { data, error } = await supabase
       .from('collections')
       .select('*, sources(*), indexing_jobs(*)')
-      .eq('id', id)
+      .eq('id', collectionId)
       .single()
     if (error) throw error
     return data
   })
 
+const CreateCollectionData = z.object({
+  name: z.string().min(1),
+  description: z.string().optional(),
+})
+
 export const createCollection = createServerFn({ method: 'POST' })
-  .validator((data: { name: string; description?: string }) => data)
   .handler(async ({ data }) => {
+    const validated = CreateCollectionData.parse(data)
     const supabase = createServerSupabaseClient()
     const { data: collection, error } = await supabase
       .from('collections')
       .insert({
-        name: data.name,
-        description: data.description,
+        name: validated.name,
+        description: validated.description ?? null,
         status: 'ready',
         chunk_count: 0,
+        user_id: '',
       })
       .select()
       .single()
@@ -42,11 +51,13 @@ export const createCollection = createServerFn({ method: 'POST' })
     return collection
   })
 
+const DeleteCollectionData = z.string()
+
 export const deleteCollection = createServerFn({ method: 'POST' })
-  .validator((id: string) => id)
   .handler(async ({ data: id }) => {
+    const collectionId = DeleteCollectionData.parse(id)
     const supabase = createServerSupabaseClient()
-    const { error } = await supabase.from('collections').delete().eq('id', id)
+    const { error } = await supabase.from('collections').delete().eq('id', collectionId)
     if (error) throw error
     return { success: true }
   })

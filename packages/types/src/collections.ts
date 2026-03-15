@@ -8,6 +8,9 @@ export interface Collection {
   created_at: string
 }
 
+export type CollectionInsert = Omit<Collection, 'id' | 'created_at'>
+export type CollectionUpdate = Partial<Omit<Collection, 'id' | 'created_at'>>
+
 export interface Source {
   id: string
   collection_id: string
@@ -19,6 +22,9 @@ export interface Source {
   status: 'pending' | 'indexing' | 'done' | 'error'
   indexed_at: string | null
 }
+
+export type SourceInsert = Omit<Source, 'id' | 'indexed_at'>
+export type SourceUpdate = Partial<Omit<Source, 'id' | 'indexed_at'>>
 
 export interface Chunk {
   id: string
@@ -41,6 +47,8 @@ export interface IndexingJob {
   started_at: string | null
   completed_at: string | null
 }
+
+export type IndexingJobInsert = Omit<IndexingJob, 'id'>
 
 export type Database = {
   public: {

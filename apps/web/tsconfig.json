@@ -14,9 +14,12 @@
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "skipLibCheck": true,
+    "types": ["vite/client", "node"],
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./app/*"]
+      "~/*": ["./app/*"],
+      "@agentic-rag/types": ["../../packages/types/src/index.ts"],
+      "@agentic-rag/types/*": ["../../packages/types/src/*"]
     }
   },
   "include": ["app/**/*.ts", "app/**/*.tsx"]

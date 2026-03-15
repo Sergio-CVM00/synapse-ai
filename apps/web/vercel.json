@@ -1,6 +1,7 @@
 {
-  "buildCommand": "pnpm --filter web build",
+  "buildCommand": "corepack enable && pnpm --filter web build",
   "outputDirectory": ".output/public",
-  "installCommand": "pnpm install",
-  "framework": null
+  "installCommand": "corepack enable && pnpm install",
+  "framework": null,
+  "nodeVersion": "20"
 }

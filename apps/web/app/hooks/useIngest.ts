@@ -47,19 +47,22 @@ export function useIngest(options: UseIngestOptions = {}): UseIngestReturn {
   })
 
   useEffect(() => {
-    if (job && (job.status === 'queued' || job.status === 'running')) {
+    if (!job) return
+    if (job.status === 'queued' || job.status === 'running') {
       setIsPolling(true)
-    } else if (job && job.status === 'done') {
+    } else if (job.status === 'done') {
       setIsPolling(false)
       options.onComplete?.()
-    } else if (job && job.status === 'failed') {
+    } else if (job.status === 'failed') {
       setIsPolling(false)
       options.onError?.(new Error(job.error_message || 'Indexing failed'))
     }
   }, [job, options])
 
+  const currentJob: IndexingJob | null = job ?? null
+  
   return {
-    job,
+    job: currentJob,
     isPolling: isPolling || isLoading,
     progress: job?.progress ?? 0,
     status: job?.status ?? null,

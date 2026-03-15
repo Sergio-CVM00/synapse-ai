@@ -1,25 +1,36 @@
 import { createServerFn } from '@tanstack/react-start'
 import { createServerSupabaseClient } from '~/lib/supabase.server'
+import { z } from 'zod'
+
+const SignUpData = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+})
+
+const SignInData = z.object({
+  email: z.string().email(),
+  password: z.string().min(1),
+})
 
 export const signUp = createServerFn({ method: 'POST' })
-  .validator((data: { email: string; password: string }) => data)
   .handler(async ({ data }) => {
+    const validated = SignUpData.parse(data)
     const supabase = createServerSupabaseClient()
     const { error } = await supabase.auth.signUp({
-      email: data.email,
-      password: data.password,
+      email: validated.email,
+      password: validated.password,
     })
     if (error) throw error
     return { success: true }
   })
 
 export const signIn = createServerFn({ method: 'POST' })
-  .validator((data: { email: string; password: string }) => data)
   .handler(async ({ data }) => {
+    const validated = SignInData.parse(data)
     const supabase = createServerSupabaseClient()
     const { error } = await supabase.auth.signInWithPassword({
-      email: data.email,
-      password: data.password,
+      email: validated.email,
+      password: validated.password,
     })
     if (error) throw error
     return { success: true }
