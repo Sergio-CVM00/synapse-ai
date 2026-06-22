@@ -8,6 +8,8 @@
 
 Synapse AI connects PDFs, Markdown files, and web pages to a reflective retrieval pipeline. Complex questions can be decomposed into parallel searches; retrieved context is evaluated before generation, and weak evidence triggers another retrieval pass.
 
+> **Project status:** the Python agent passes static validation. The frontend prototype still needs TanStack Start API/version alignment before its typecheck and production build pass.
+
 ## Highlights
 
 - Reflective LangGraph workflow with bounded retrieval retries
@@ -81,13 +83,9 @@ cp apps/agent/.env.example apps/agent/.env
 
 Fill in the Supabase and model-provider values in the two environment files. Never commit real credentials.
 
-### Start the services
+### Start the agent service
 
 ```bash
-# Terminal 1: web app on http://localhost:3000
-pnpm dev
-
-# Terminal 2: agent API on http://localhost:8000
 source apps/agent/.venv/bin/activate
 cd apps/agent
 uvicorn main:app --reload --port 8000
@@ -96,8 +94,6 @@ uvicorn main:app --reload --port 8000
 ## Verify
 
 ```bash
-pnpm typecheck
-pnpm build
 python -m compileall apps/agent
 ```
 
